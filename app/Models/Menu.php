@@ -15,4 +15,14 @@ class Menu extends Model
         'label',
         'link'
     ];
+
+    public function induk()
+    {
+        return $this->belongsTo(self::class);
+    }
+
+    public function subs()
+    {
+        return $this->hasMany(self::class, 'induk_id');
+    }
 }
