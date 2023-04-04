@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\MenuResource\Pages;
-use App\Filament\Resources\MenuResource\RelationManagers;
-use App\Models\Menu;
+use App\Filament\Resources\TiketResource\Pages;
+use App\Filament\Resources\TiketResource\RelationManagers;
+use App\Models\Tiket;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -13,14 +13,13 @@ use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class MenuResource extends Resource
+class TiketResource extends Resource
 {
-    protected static ?string $model = Menu::class;
+    protected static ?string $model = Tiket::class;
 
-    
-    protected static ?string $navigationIcon = 'heroicon-o-view-list';
-    
-    protected static ?string $navigationLabel = 'Menu';
+    protected static ?string $navigationIcon = 'heroicon-o-ticket';
+
+    protected static ?string $navigationLabel = 'Tiket';
 
     public static function getPluralModelLabel(): string
     {
@@ -31,15 +30,13 @@ class MenuResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('induk_id')
-                    ->relationship('induk', 'label')
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('label')
+                Forms\Components\TextInput::make('nama')
                     ->maxLength(255)
-                    ->required()
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('link')
-                    ->maxLength(255)
+                    ->required(),
+                Forms\Components\TextInput::make('harga')
+                    ->required(),
+                Forms\Components\Textarea::make('deskripsi')
+                    ->maxLength(65535)
                     ->columnSpanFull(),
             ]);
     }
@@ -48,9 +45,8 @@ class MenuResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('induk.label'),
-                Tables\Columns\TextColumn::make('label'),
-                Tables\Columns\TextColumn::make('link'),
+                Tables\Columns\TextColumn::make('nama'),
+                Tables\Columns\TextColumn::make('harga'),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime(),
             ])
@@ -69,7 +65,7 @@ class MenuResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageMenus::route('/'),
+            'index' => Pages\ManageTikets::route('/'),
         ];
     }    
 }

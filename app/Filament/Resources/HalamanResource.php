@@ -17,7 +17,7 @@ class HalamanResource extends Resource
 {
     protected static ?string $model = Halaman::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-document';
 
     protected static ?string $navigationLabel = 'Halaman';
 
