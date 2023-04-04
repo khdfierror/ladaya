@@ -34,6 +34,13 @@ class TiketResource extends Resource
                     ->maxLength(255)
                     ->required(),
                 Forms\Components\TextInput::make('harga')
+                    ->numeric()
+                    ->mask(
+                        fn (Forms\Components\TextInput\Mask $mask) => $mask
+                        ->numeric()
+                        ->decimalPlaces(2)
+                        ->thousandsSeparator(',')
+                    )
                     ->required(),
                 Forms\Components\Textarea::make('deskripsi')
                     ->maxLength(65535)
@@ -46,7 +53,8 @@ class TiketResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('nama'),
-                Tables\Columns\TextColumn::make('harga'),
+                Tables\Columns\TextColumn::make('harga')
+                    ->money('idr'),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime(),
             ])
