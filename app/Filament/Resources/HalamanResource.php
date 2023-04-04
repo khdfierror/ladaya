@@ -12,6 +12,8 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
+use Closure;
 
 class HalamanResource extends Resource
 {
@@ -32,6 +34,10 @@ class HalamanResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('judul')
+                    ->reactive()
+                    ->afterStateUpdated(function (Closure $set, $state) {
+                        $set('slug', Str::slug($state));
+                    })
                     ->required(),
                 Forms\Components\TextInput::make('slug')
                     ->maxLength(255),
