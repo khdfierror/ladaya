@@ -27,4 +27,9 @@ class Penjualan extends Model
         'kuantiti' => 'integer',
         'total' => 'double',
     ];
+
+    public function tiket()
+    {
+        return $this->belongsTo(Tiket::class);
+    }
 }
