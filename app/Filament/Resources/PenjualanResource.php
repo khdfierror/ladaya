@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PenjualanResource\Pages;
 use App\Filament\Resources\PenjualanResource\RelationManagers;
 use App\Models\Penjualan;
+use App\Models\Tiket;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -42,10 +43,48 @@ class PenjualanResource extends Resource
                     ->email()
                     ->maxLength(255),
                 Forms\Components\Select::make('tiket_id')
-                    ->relationship('tiket', 'nama'),
-                Forms\Components\TextInput::make('harga'),
-                Forms\Components\TextInput::make('kuantiti'),
-                Forms\Components\TextInput::make('total'),
+                    ->relationship('tiket', 'nama')
+                    ->reactive()
+                    ->afterStateUpdated(function($state, callable $get, callable $set){
+                        $tiket = Tiket::find($state);
+                        
+                        if($tiket){
+                            $set('harga', (string) $tiket->harga);
+
+                            $total = doubleval($get('harga')) * intval($get('kuantiti'));
+                            $set('total', (string) $total);
+                        }
+                    }),
+                Forms\Components\TextInput::make('harga')
+                    ->numeric()
+                    ->mask(
+                        fn (Forms\Components\TextInput\Mask $mask) => $mask
+                        ->numeric()
+                        ->decimalPlaces(2)
+                        ->thousandsSeparator(',')
+                    ),
+                Forms\Components\TextInput::make('kuantiti')
+                    ->numeric()
+                    ->mask(
+                        fn (Forms\Components\TextInput\Mask $mask) => $mask
+                            ->numeric()
+                            ->thousandsSeparator(',')
+                    )->reactive()
+                    ->afterStateUpdated(function ($state, callable $get, callable $set) {
+                        $total = doubleval($get('harga')) * intval($get('kuantiti'));
+                        $set('total', (string) $total);
+                    }),
+                Forms\Components\TextInput::make('total')
+                    ->numeric()
+                    ->mask(
+                        fn (Forms\Components\TextInput\Mask $mask) => $mask
+                        ->numeric()
+                        ->decimalPlaces(2)
+                        ->thousandsSeparator(',')
+                    )
+                    ->extraInputAttributes([
+                        'readonly' => true
+                    ]),
             ]);
     }
 
@@ -57,13 +96,11 @@ class PenjualanResource extends Resource
                 Tables\Columns\TextColumn::make('nama_pelanggan'),
                 Tables\Columns\TextColumn::make('hp_pelanggan'),
                 Tables\Columns\TextColumn::make('email_pelanggan'),
-                Tables\Columns\TextColumn::make('tiket_id'),
-                Tables\Columns\TextColumn::make('harga'),
+                Tables\Columns\TextColumn::make('tiket.nama'),
+                Tables\Columns\TextColumn::make('harga')->money('idr'),
                 Tables\Columns\TextColumn::make('kuantiti'),
-                Tables\Columns\TextColumn::make('total'),
+                Tables\Columns\TextColumn::make('total')->money('idr'),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
-                Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime(),
             ])
             ->filters([
