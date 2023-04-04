@@ -18,7 +18,8 @@ use Closure;
 class HalamanResource extends Resource
 {
     protected static ?string $model = Halaman::class;
-
+    
+    protected static ?int $navigationSort = 1;
     protected static ?string $navigationIcon = 'heroicon-o-document';
 
     protected static ?string $navigationLabel = 'Halaman';

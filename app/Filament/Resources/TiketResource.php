@@ -16,7 +16,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class TiketResource extends Resource
 {
     protected static ?string $model = Tiket::class;
-
+    
+    protected static ?int $navigationSort = 2;
     protected static ?string $navigationIcon = 'heroicon-o-ticket';
 
     protected static ?string $navigationLabel = 'Tiket';
