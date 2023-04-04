@@ -48,10 +48,7 @@ class HalamanResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('judul'),
                 Tables\Columns\TextColumn::make('slug'),
-                Tables\Columns\TextColumn::make('konten'),
-                Tables\Columns\TextColumn::make('gambar'),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
+                Tables\Columns\ImageColumn::make('gambar'),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime(),
             ])
